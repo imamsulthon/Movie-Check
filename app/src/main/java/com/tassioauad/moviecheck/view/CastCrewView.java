@@ -6,6 +6,17 @@ import com.tassioauad.moviecheck.model.entity.Crew;
 import java.util.List;
 
 public interface CastCrewView {
+
+    void hideLoadingDirectors();
+
+    void showLoadingDirector();
+
+    void showDirectors(List<Crew> directorList);
+
+    void warnAnyFoundedDirectors();
+
+    void warnFailedToLoadDirectors();
+
     void hideLoadingCrew();
 
     void showLoadingCrew();
@@ -20,7 +31,7 @@ public interface CastCrewView {
 
     void warnAnyCastFounded();
 
-    void showCasts(List<Cast> crewList);
+    void showCasts(List<Cast> castList);
 
     void hideLoadingCast();
 

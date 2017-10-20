@@ -25,6 +25,7 @@ import com.tassioauad.moviecheck.view.CastCrewView;
 import com.tassioauad.moviecheck.view.activity.PersonProfileActivity;
 import com.tassioauad.moviecheck.view.adapter.CastListAdapter;
 import com.tassioauad.moviecheck.view.adapter.CrewListAdapter;
+import com.tassioauad.moviecheck.view.adapter.DirectorListAdapter;
 import com.tassioauad.moviecheck.view.adapter.OnItemClickListener;
 
 import java.util.ArrayList;
@@ -40,8 +41,11 @@ public class CastCrewFragment extends Fragment implements CastCrewView {
     @Inject
     CastCrewPresenter presenter;
 
+    //
+
     private List<Cast> castList;
     private List<Crew> crewList;
+    private List<Crew> directorList;
     private Movie movie;
     private static final String KEY_CREWLIST = "CREWLIST";
     private static final String KEY_CASTLIST = "CASTLIST";
@@ -51,6 +55,8 @@ public class CastCrewFragment extends Fragment implements CastCrewView {
     RecyclerView recyclerViewCast;
     @Bind(R.id.recyclerview_crew)
     RecyclerView recyclerViewCrew;
+    @Bind(R.id.recyclerview_director)
+    RecyclerView recyclerViewDirector;
     @Bind(R.id.linearlayout_cast_anyfounded)
     LinearLayout linearLayoutAnyCastFounded;
     @Bind(R.id.linearlayout_cast_loadfailed)
@@ -63,6 +69,14 @@ public class CastCrewFragment extends Fragment implements CastCrewView {
     LinearLayout linearLayoutCrewLoadFailed;
     @Bind(R.id.progressbar_crew)
     ProgressBar progressBarCrew;
+    @Bind(R.id.linearlayout_director_anyfounded)
+    LinearLayout linearLayoutAnyDirectorFounded;
+    @Bind(R.id.linearlayout_director_loadfailed)
+    LinearLayout linearLayoutDirectorLoadFailed;
+    @Bind(R.id.progressbar_director)
+    ProgressBar progressBarDirector;
+
+    //
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,10 +111,20 @@ public class CastCrewFragment extends Fragment implements CastCrewView {
 
         if (crewList == null) {
             presenter.loadCrew(movie);
+            presenter.loadDirector(movie);
         } else if (crewList.size() == 0) {
             warnAnyCrewFounded();
         } else {
             showCrews(crewList);
+            Crew crew = new Crew();
+            directorList = new ArrayList<>();
+            for (int i = 0; i<crewList.size(); i++) {
+                crew = crewList.get(i);
+                if (crew.getJob().equals("Director")) {
+                    directorList.add(crewList.get(i));
+                }
+            }
+            showDirectors(directorList);
         }
 
         return view;
@@ -136,6 +160,62 @@ public class CastCrewFragment extends Fragment implements CastCrewView {
         CastCrewFragment fragment = new CastCrewFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void hideLoadingDirectors() {
+        progressBarDirector.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showLoadingDirector() {
+        progressBarDirector.setVisibility(View.VISIBLE);
+        linearLayoutDirectorLoadFailed.setVisibility(View.GONE);
+        linearLayoutAnyDirectorFounded.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showDirectors(List<Crew> directorList) {
+        this.directorList = directorList;
+        linearLayoutDirectorLoadFailed.setVisibility(View.GONE);
+        linearLayoutAnyDirectorFounded.setVisibility(View.GONE);
+        recyclerViewDirector.setVisibility(View.VISIBLE);
+        recyclerViewDirector.setLayoutManager(new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.HORIZONTAL));
+        recyclerViewDirector.setAdapter(new DirectorListAdapter(directorList, new OnItemClickListener<Crew>() {
+            @Override
+            public void onClick(Crew crew, View view) {
+                startActivity(PersonProfileActivity.newIntent(getActivity(), crew), ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(getActivity(), view.findViewById(R.id.imageview_profile),
+                                "personPhoto").toBundle());
+            }
+
+            @Override
+            public void onLongClick(Crew crew, View view) {
+
+            }
+        }));
+        recyclerViewDirector.setNestedScrollingEnabled(false);
+    }
+
+    @Override
+    public void warnAnyFoundedDirectors() {
+        directorList = new ArrayList<>();
+        linearLayoutDirectorLoadFailed.setVisibility(View.GONE);
+        linearLayoutAnyDirectorFounded.setVisibility(View.VISIBLE);
+        recyclerViewDirector.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void warnFailedToLoadDirectors() {
+        linearLayoutDirectorLoadFailed.setVisibility(View.VISIBLE);
+        linearLayoutDirectorLoadFailed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.loadDirector(movie);
+            }
+        });
+        linearLayoutAnyDirectorFounded.setVisibility(View.GONE);
+        recyclerViewDirector.setVisibility(View.GONE);
     }
 
     @Override

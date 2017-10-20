@@ -1,5 +1,6 @@
 package com.tassioauad.moviecheck.view;
 
+import com.tassioauad.moviecheck.model.entity.Crew;
 import com.tassioauad.moviecheck.model.entity.Genre;
 
 import java.util.Date;
@@ -27,6 +28,16 @@ public interface MovieDetailView {
     void warnAnyGenreFounded();
 
     void hideLoadingGenres();
+
+    void hideLoadingDirectors();
+
+    void showLoadingDirector();
+
+    void showDirectors(List<Crew> directorList);
+
+    void warnAnyFoundedDirectors();
+
+    void warnFailedToLoadDirectors();
 
     void disableToCheckInterest();
 

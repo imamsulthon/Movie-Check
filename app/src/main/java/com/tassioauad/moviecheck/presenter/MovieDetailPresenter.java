@@ -1,11 +1,13 @@
 package com.tassioauad.moviecheck.presenter;
 
 
+import com.tassioauad.moviecheck.model.api.CrewApi;
 import com.tassioauad.moviecheck.model.api.GenreApi;
 import com.tassioauad.moviecheck.model.api.asynctask.ApiResultListener;
 import com.tassioauad.moviecheck.model.dao.MovieInterestDao;
 import com.tassioauad.moviecheck.model.dao.MovieWatchedDao;
 import com.tassioauad.moviecheck.model.dao.UserDao;
+import com.tassioauad.moviecheck.model.entity.Crew;
 import com.tassioauad.moviecheck.model.entity.Genre;
 import com.tassioauad.moviecheck.model.entity.Movie;
 import com.tassioauad.moviecheck.model.entity.MovieInterest;
@@ -23,13 +25,17 @@ public class MovieDetailPresenter {
     private MovieWatchedDao movieWatchedDao;
     private UserDao userDao;
     private Movie movie;
+    private CrewApi crewApi;
 
-    public MovieDetailPresenter(MovieDetailView view, GenreApi genreApi, MovieInterestDao movieInterestDao, MovieWatchedDao movieWatchedDao, UserDao userDao) {
+    public MovieDetailPresenter(MovieDetailView view, GenreApi genreApi, CrewApi crewApi, MovieInterestDao movieInterestDao,
+                                MovieWatchedDao movieWatchedDao, UserDao userDao) {
         this.view = view;
         this.genreApi = genreApi;
+        this.crewApi = crewApi;
         this.movieInterestDao = movieInterestDao;
         this.movieWatchedDao = movieWatchedDao;
         this.userDao = userDao;
+
     }
 
     public void init(Movie movie) {
@@ -58,6 +64,37 @@ public class MovieDetailPresenter {
                 view.checkInterest();
             }
         }
+    }
+
+    public void loadDirector(Movie movie) {
+        view.showLoadingDirector();
+        crewApi.setApiResultListener(new ApiResultListener() {
+            @Override
+            public void onResult(Object object) {
+                List<Crew> crewList = (List<Crew>) object;
+                if (crewList == null || crewList.size() == 0) {
+                    view.warnAnyFoundedDirectors();
+                } else {
+                    Crew crew = new Crew();
+                    List<Crew> directorList = new ArrayList<Crew>();
+                    for (int i = 0; i<crewList.size(); i++) {
+                        crew = crewList.get(i);
+                        if (crew.getJob().equals("Director")) {
+                            directorList.add(crewList.get(i));
+                        }
+                    }
+                    view.showDirectors(directorList);
+                }
+                view.hideLoadingDirectors();
+            }
+
+            @Override
+            public void onException(Exception exception) {
+                view.warnFailedToLoadDirectors();
+                view.hideLoadingDirectors();
+            }
+        });
+        crewApi.listAllByMovie(movie);
     }
 
     public void loadGenres() {

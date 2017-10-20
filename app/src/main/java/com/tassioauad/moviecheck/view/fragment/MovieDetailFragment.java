@@ -24,12 +24,16 @@ import com.squareup.picasso.Picasso;
 import com.tassioauad.moviecheck.MovieCheckApplication;
 import com.tassioauad.moviecheck.R;
 import com.tassioauad.moviecheck.dagger.MovieDetailViewModule;
+import com.tassioauad.moviecheck.model.entity.Crew;
 import com.tassioauad.moviecheck.model.entity.Genre;
 import com.tassioauad.moviecheck.model.entity.Movie;
 import com.tassioauad.moviecheck.presenter.MovieDetailPresenter;
 import com.tassioauad.moviecheck.view.MovieDetailView;
 import com.tassioauad.moviecheck.view.activity.FullImageSliderActivity;
 import com.tassioauad.moviecheck.view.activity.ListMoviesByGenreActivity;
+import com.tassioauad.moviecheck.view.activity.PersonProfileActivity;
+import com.tassioauad.moviecheck.view.adapter.DirectedByAdapter;
+import com.tassioauad.moviecheck.view.adapter.DirectorListAdapter;
 import com.tassioauad.moviecheck.view.adapter.GenreListAdapter;
 import com.tassioauad.moviecheck.view.adapter.OnItemClickListener;
 
@@ -51,7 +55,11 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
     private static final String KEY_MOVIE = "MOVIE";
     private static final String KEY_GENRELIST = "GENRELIST";
     private static final String KEY_ALLOWINTEREST = "ALLOWINTEREST";
+    private static final String KEY_CREWLIST = "CREWLIST";
+    private Movie movie;
     private List<Genre> genreList;
+    private List<Crew> crewList;
+    private List<Crew> directorList;
     RatingBar.OnRatingBarChangeListener onRatingBarChangeListener;
 
     @Bind(R.id.textview_votecount)
@@ -70,6 +78,10 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
     RecyclerView recyclerViewGenres;
     @Bind(R.id.progressbar_genre)
     ProgressBar progressBarGenre;
+    @Bind(R.id.recyclerview_director)
+    RecyclerView recyclerViewDirectedBy;
+    @Bind(R.id.progressbar_director)
+    ProgressBar progressBarDirectedBy;
     @Bind(R.id.fab_interest)
     FloatingActionButton fabInterest;
 
@@ -82,6 +94,10 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
         if (genreList == null && savedInstanceState != null) {
             genreList = savedInstanceState.getParcelableArrayList(KEY_GENRELIST);
         }
+
+        if (crewList == null && savedInstanceState != null) {
+            crewList = savedInstanceState.getParcelableArrayList(KEY_CREWLIST);
+        }
     }
 
     @Nullable
@@ -90,12 +106,30 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
         View view = inflater.inflate(R.layout.fragment_moviedetail, container, false);
         ButterKnife.bind(this, view);
 
-        presenter.init((Movie) getArguments().getParcelable(KEY_MOVIE));
+        movie =getArguments().getParcelable(KEY_MOVIE);
+
+        presenter.init(movie);
 
         if (genreList == null) {
             presenter.loadGenres();
         } else if (genreList.size() > 0) {
             showGenres(genreList);
+        }
+
+        if (crewList == null) {
+            presenter.loadDirector(movie);
+        } else if (crewList.size() == 0) {
+            warnAnyFoundedDirectors();
+        } else {
+            Crew crew = new Crew();
+            directorList = new ArrayList<>();
+            for (int i = 0; i<crewList.size(); i++) {
+                crew = crewList.get(i);
+                if (crew.getJob().equals("Director")) {
+                    directorList.add(crewList.get(i));
+                }
+            }
+            showDirectors(directorList);
         }
 
         fabInterest.setOnClickListener(new View.OnClickListener() {
@@ -240,6 +274,46 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
     @Override
     public void hideLoadingGenres() {
         progressBarGenre.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideLoadingDirectors() {
+        progressBarDirectedBy.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showLoadingDirector() {
+        progressBarDirectedBy.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showDirectors(List<Crew> directorList) {
+        this.directorList = directorList;
+        recyclerViewDirectedBy.setVisibility(View.VISIBLE);
+        recyclerViewDirectedBy.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL));
+        recyclerViewDirectedBy.setAdapter(new DirectedByAdapter(directorList, new OnItemClickListener<Crew>() {
+            @Override
+            public void onClick(Crew crew, View view) {
+                startActivity(PersonProfileActivity.newIntent(getActivity(), crew), ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(getActivity(), view.findViewById(R.id.textview_name),
+                                "personPhoto").toBundle());
+            }
+
+            @Override
+            public void onLongClick(Crew crew, View view) {
+
+            }
+        }));
+    }
+
+    @Override
+    public void warnAnyFoundedDirectors() {
+        directorList = new ArrayList<>();
+    }
+
+    @Override
+    public void warnFailedToLoadDirectors() {
+        Toast.makeText(getActivity(), "oops failed to load director!", Toast.LENGTH_LONG).show();
     }
 
     @Override

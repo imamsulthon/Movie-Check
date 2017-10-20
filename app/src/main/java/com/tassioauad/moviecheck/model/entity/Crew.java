@@ -12,6 +12,10 @@ public class Crew extends Person {
 
     private String homepage;
 
+    public Crew() {
+
+    }
+
     public Crew(Long id, String name, String biography, String profilePath, String placeOfBith, Date birthday, Date deathday, String job, String department, String homepage) {
         super(id, name, biography, profilePath, placeOfBith, birthday, deathday);
         this.job = job;
