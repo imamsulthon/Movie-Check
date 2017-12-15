@@ -40,9 +40,12 @@ public class MovieDetailPresenter {
 
     public void init(Movie movie) {
         this.movie = movie;
+
+        String tagline = movie.getTagline();
         view.showVoteCount(movie.getVoteCount());
         view.showVoteAverage(movie.getVoteAverage());
         view.showOverview(movie.getOverview());
+        view.showTagline(movie.getTagline());
         if (movie.getReleaseDate() != null) {
             view.showReleaseDate(movie.getReleaseDate());
         }
@@ -133,6 +136,7 @@ public class MovieDetailPresenter {
 
     public void stop() {
         genreApi.cancelAllServices();
+        crewApi.cancelAllServices();
     }
 
     public void checkInterest() {

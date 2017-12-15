@@ -26,10 +26,11 @@ public class MovieDaoImpl extends Dao implements MovieDao {
     public static final String COLUMN_NAME_VOTE_COUNT = "vote_count";
     public static final String COLUMN_NAME_VOTE_OVERVIEW = "overview";
     public static final String COLUMN_NAME_GENRE_IDS = "genre_ids";
+    public static final String COLUMN_NAME_TAGLINE = "tagline";
     private static final String GENRE_ID_DIVISOR = ";";
     public static final String[] COLUMNS = new String [] {COLUMN_NAME_ID, COLUMN_NAME_TITLE,
             COLUMN_NAME_RELEASE_DATE, COLUMN_NAME_BACKDROP_URL, COLUMN_NAME_POSTER_URL,
-            COLUMN_NAME_VOTE_AVERAGE, COLUMN_NAME_VOTE_COUNT, COLUMN_NAME_VOTE_OVERVIEW,
+            COLUMN_NAME_VOTE_AVERAGE, COLUMN_NAME_VOTE_COUNT, COLUMN_NAME_VOTE_OVERVIEW, COLUMN_NAME_TAGLINE,
             COLUMN_NAME_GENRE_IDS};
 
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (\n" +
@@ -41,6 +42,7 @@ public class MovieDaoImpl extends Dao implements MovieDao {
             COLUMN_NAME_VOTE_AVERAGE + " REAL, \n" +
             COLUMN_NAME_VOTE_COUNT + " INTEGER, \n" +
             COLUMN_NAME_VOTE_OVERVIEW + " TEXT, \n" +
+            COLUMN_NAME_TAGLINE + " TEXT, \n" +
             COLUMN_NAME_GENRE_IDS + " TEXT \n" +
             ")";
 
@@ -107,8 +109,9 @@ public class MovieDaoImpl extends Dao implements MovieDao {
             movie.setVoteAverage(cursor.getFloat(5));
             movie.setVoteCount(cursor.getLong(6));
             movie.setOverview(cursor.getString(7));
+            movie.setTagline(cursor.getString(8));
             ArrayList<Long> genreIdList = new ArrayList<>();
-            String[] genreIdArray = cursor.getString(8).split(GENRE_ID_DIVISOR);
+            String[] genreIdArray = cursor.getString(9).split(GENRE_ID_DIVISOR);
             for(String genreId : genreIdArray) {
                 if(!genreId.isEmpty()) {
                     genreIdList.add(Long.parseLong(genreId));
@@ -134,6 +137,7 @@ public class MovieDaoImpl extends Dao implements MovieDao {
         contentValues.put(COLUMN_NAME_VOTE_AVERAGE, movie.getVoteAverage());
         contentValues.put(COLUMN_NAME_VOTE_COUNT, movie.getVoteCount());
         contentValues.put(COLUMN_NAME_VOTE_OVERVIEW, movie.getOverview());
+        contentValues.put(COLUMN_NAME_TAGLINE, movie.getTagline());
         StringBuilder stringBuilder = new StringBuilder();
         for(Long genreId : movie.getGenreId()) {
             stringBuilder.append(genreId);

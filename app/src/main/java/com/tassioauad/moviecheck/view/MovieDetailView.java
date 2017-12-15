@@ -13,6 +13,8 @@ public interface MovieDetailView {
 
     void showOverview(String overview);
 
+    void showTagline(String tagline);
+
     void showReleaseDate(Date releaseDate);
 
     void showPoster(String posterUrl);

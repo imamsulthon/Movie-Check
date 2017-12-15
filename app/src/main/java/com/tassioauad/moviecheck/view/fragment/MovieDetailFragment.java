@@ -82,6 +82,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
     RecyclerView recyclerViewDirectedBy;
     @Bind(R.id.progressbar_director)
     ProgressBar progressBarDirectedBy;
+    @Bind(R.id.textview_tagline)
+    TextView textViewTagline;
     @Bind(R.id.fab_interest)
     FloatingActionButton fabInterest;
 
@@ -206,6 +208,11 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
     @Override
     public void showOverview(String overview) {
         textViewOverview.setText(overview);
+    }
+
+    @Override
+    public void showTagline(String tagline) {
+        textViewTagline.setText(tagline);
     }
 
     @Override
