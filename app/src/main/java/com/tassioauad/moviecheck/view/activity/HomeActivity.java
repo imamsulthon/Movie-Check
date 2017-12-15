@@ -40,6 +40,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.Picasso;
+import com.tassioauad.moviecheck.ListPopularPersonActivity;
 import com.tassioauad.moviecheck.MovieCheckApplication;
 import com.tassioauad.moviecheck.R;
 import com.tassioauad.moviecheck.dagger.HomeViewModule;
@@ -218,6 +219,10 @@ public class HomeActivity extends AppCompatActivity implements HomeView, GoogleA
                         break;
                     case R.id.drawer_popular:
                         startActivity(ListPopularMoviesActivity.newIntent(HomeActivity.this), ActivityOptionsCompat.makeSceneTransitionAnimation(HomeActivity.this).toBundle());
+                        drawerLayout.closeDrawers();
+                        break;
+                    case R.id.drawer_popularperson:
+                        startActivity(ListPopularPersonActivity.newIntent(HomeActivity.this), ActivityOptionsCompat.makeSceneTransitionAnimation(HomeActivity.this).toBundle());
                         drawerLayout.closeDrawers();
                         break;
                 }

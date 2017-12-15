@@ -18,5 +18,7 @@ public interface PersonResource {
     @GET("search/person")
     Call<List<Person>> listByName(@Query("api_key") String apiKey, @Query("query") String query, @Query("page") int page);
 
+    @GET("person/popular")
+    Call<List<Person>> listPopularPerson(@Query("api_key") String apiKey, @Query("page") Integer page);
 
 }

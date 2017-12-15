@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tassioauad.moviecheck">
 
@@ -11,7 +12,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".view.activity.HomeActivity"
             android:windowSoftInputMode="adjustPan">
@@ -21,6 +21,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -43,6 +44,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -58,9 +60,8 @@
             android:writePermission="com.tassioauad.moviecheck.model.dao.contentprovider.moviecheckcontentprovider.WRITE" />
 
         <service
-            android:name="com.tassioauad.moviecheck.widget.UpcomingMovieWidgetRemoteViewsService"
+            android:name=".widget.UpcomingMovieWidgetRemoteViewsService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-
         <service android:name=".widget.UpcomingMovieUpdateService" />
 
         <receiver
@@ -76,6 +77,7 @@
                 android:resource="@xml/upcomingmovieswidget_info" />
         </receiver>
 
+        <activity android:name=".ListPopularPersonActivity"></activity>
     </application>
 
 </manifest>

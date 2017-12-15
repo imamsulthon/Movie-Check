@@ -7,12 +7,14 @@ import com.tassioauad.moviecheck.model.api.GenericApi;
 import com.tassioauad.moviecheck.model.api.PersonApi;
 import com.tassioauad.moviecheck.model.api.asynctask.FindPersonAsyncTask;
 import com.tassioauad.moviecheck.model.api.asynctask.ListPersonByNameAsyncTask;
+import com.tassioauad.moviecheck.model.api.asynctask.ListPopularPersonAsyncTask;
 import com.tassioauad.moviecheck.model.api.resource.PersonResource;
 
 public class PersonApiImpl extends GenericApi implements PersonApi {
 
     private FindPersonAsyncTask findPersonAsyncTask;
     private ListPersonByNameAsyncTask listPersonByNameAsyncTask;
+    private ListPopularPersonAsyncTask listPopularPersonAsyncTask;
     private PersonResource personResource;
 
     public PersonApiImpl(Context context, PersonResource personResource) {
@@ -42,6 +44,14 @@ public class PersonApiImpl extends GenericApi implements PersonApi {
         listPersonByNameAsyncTask = new ListPersonByNameAsyncTask(getContext(), personResource, name, 1);
         listPersonByNameAsyncTask.setApiResultListener(getApiResultListener());
         listPersonByNameAsyncTask.execute();
+    }
+
+    @Override
+    public void listPopularPerson(int page) {
+        verifyServiceResultListener();
+        listPopularPersonAsyncTask = new ListPopularPersonAsyncTask(getContext(), personResource, 1);
+        listPopularPersonAsyncTask.setApiResultListener(getApiResultListener());
+        listPopularPersonAsyncTask.execute();
     }
 
     @Override

@@ -6,4 +6,6 @@ public interface PersonApi extends AsyncService {
     void listByName(String name, int page);
 
     void listByName(String name);
+
+    void listPopularPerson(int page);
 }

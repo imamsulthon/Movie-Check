@@ -35,5 +35,15 @@
             android:icon="@drawable/white_star"
             android:title="@string/general_popular"/>
 
+        <item
+            android:id="@+id/drawer_popularperson"
+            android:icon="@drawable/white_star"
+            android:title="@string/general_actor"/>
+
+        <item
+            android:id="@+id/drawer_series"
+            android:icon="@drawable/play"
+            android:title="@string/general_series"/>
+
     </group>
 </menu>

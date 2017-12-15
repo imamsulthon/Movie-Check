@@ -14,6 +14,8 @@
     <string name="general_upcoming">Upcoming Movies</string>
     <string name="general_popular">Popular Movies</string>
     <string name="general_toprated">Top Rated Movies</string>
+    <string name="general_actor">Actor</string>
+    <string name="general_series">TV Series</string>
     <string name="general_more">more</string>
     <string name="general_date">MM-dd-yyyy</string>
     <string name="general_failedtoload">Ops! Failed to Load! :´( \n Touch to try again</string>
