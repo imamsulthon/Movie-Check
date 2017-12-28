@@ -19,6 +19,7 @@ public class ListUpComingMovieAsyncTaskTest extends AndroidTestCase {
 
     MovieResource movieResource;
     Integer page = 1;
+    List<String> rootName;
 
     @Override
     protected void setUp() throws Exception {

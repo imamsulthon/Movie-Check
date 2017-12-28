@@ -19,6 +19,7 @@ public class ListPopularMoviesAsyncTaskTest extends AndroidTestCase {
 
     MovieResource movieResource;
     int page = 1;
+    List<String> rootName;
 
     public void setUp() throws Exception {
         super.setUp();

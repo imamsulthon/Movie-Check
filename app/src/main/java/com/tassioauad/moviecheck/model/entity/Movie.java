@@ -67,6 +67,10 @@ public class Movie implements Parcelable {
         this.popularity = popularity;
     }
 
+    public Movie(Long id, String title, Date releaseDate, String backdropUrl, String posterUrl, String overview, boolean adult, float voteAverage, long voteCount, List<Long> genreIdList, String language, double popularity) {
+
+    }
+
     public Long getId() {
         return id;
     }

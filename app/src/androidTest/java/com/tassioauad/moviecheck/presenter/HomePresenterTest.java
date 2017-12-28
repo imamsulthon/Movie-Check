@@ -6,6 +6,7 @@ import com.tassioauad.moviecheck.entity.MovieBuilder;
 import com.tassioauad.moviecheck.model.api.MovieApi;
 import com.tassioauad.moviecheck.model.api.asynctask.ApiResultListener;
 import com.tassioauad.moviecheck.model.api.asynctask.exception.BadRequestException;
+import com.tassioauad.moviecheck.model.dao.UserDao;
 import com.tassioauad.moviecheck.model.entity.Movie;
 import com.tassioauad.moviecheck.view.HomeView;
 
@@ -28,6 +29,7 @@ public class HomePresenterTest extends AndroidTestCase {
     HomePresenter presenter;
     MovieApi movieApi;
     ArgumentCaptor<ApiResultListener> apiResultListenerArgumentCaptor;
+    UserDao userDao;
 
     public void setUp() throws Exception {
         super.setUp();
