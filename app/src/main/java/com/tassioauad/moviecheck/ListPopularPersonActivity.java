@@ -135,7 +135,7 @@ public class ListPopularPersonActivity extends AppCompatActivity implements List
             recyclerViewPersons.setVisibility(View.GONE);
         } else {
             Toast.makeText(this, getString(R.string.general_anyfounded), Toast.LENGTH_SHORT).show();
-            listViewAdapter.withShowMoreButton(false);
+            listViewAdapter.withShowMoreButton(true);
             recyclerViewPersons.setAdapter(listViewAdapter);
         }
     }

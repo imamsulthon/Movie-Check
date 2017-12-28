@@ -37,7 +37,7 @@
 
         <item
             android:id="@+id/drawer_popularperson"
-            android:icon="@drawable/white_star"
+            android:icon="@drawable/oscar"
             android:title="@string/general_actor"/>
 
         <item
